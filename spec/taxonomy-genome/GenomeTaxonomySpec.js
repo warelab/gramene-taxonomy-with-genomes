@@ -33,6 +33,9 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(taxonomy.results()).toBeUndefined();
       expect(taxonomy.binCount()).toEqual(6009);
       expect(taxonomy.species().length).toEqual(39);
+
+      // no results yet, so...
+      expect(taxonomy.speciesWithResults().length).toEqual(0);
     });
   });
 
@@ -107,6 +110,9 @@ describe('Taxonomy with Binned Genomes', function () {
 
         expect(taxonomy.results()).toBeDefined();
         expect(taxonomy.results().count).toEqual(2147);
+
+        expect(taxonomy.species().length).toEqual(39);
+        expect(taxonomy.speciesWithResults().length).toEqual(37);
       }
     );
   });

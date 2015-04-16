@@ -22,13 +22,24 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
   taxonomy.binCount = genomes.binCount.bind(genomes);
   taxonomy.setResults = genomes.setResults.bind(genomes);
 
-  taxonomy.species = function () {
-    return taxonomy.all(function (node) {
-      return node.model.genome;
-    }).map(function (node) {
-      return node.model;
-    });
+  function getNodesAndReturnModel(predicate) {
+    return function () {
+      return taxonomy.all(predicate)
+        .map(function (node) {
+          return node.model;
+        });
+    }
   }
+
+  taxonomy.species = getNodesAndReturnModel(function (node) {
+    return node.model.genome;
+  });
+
+  taxonomy.speciesWithResults = getNodesAndReturnModel(function (node) {
+    return node.model.genome &&
+      node.model.genome.results &&
+      node.model.genome.results.count;
+  });
 }
 
 function removeGenomesFromTaxonomy(taxonomy) {
@@ -36,26 +47,26 @@ function removeGenomesFromTaxonomy(taxonomy) {
     delete speciesNode.model.genome;
   });
 
-  ['results', 'binCount', 'setResults', 'species'].map(function(fnName) {
+  ['results', 'binCount', 'setResults', 'species'].map(function (fnName) {
     delete taxonomy[fnName];
   })
 }
 
 function addGeneratorToTaxonomy(binsGenerator, taxonomy) {
   taxonomy.binParams = {};
-  taxonomy.setBinType = function(methodName, param) {
+  taxonomy.setBinType = function (methodName, param) {
 
-    var newParams = methodName ? { method: methodName, param: param } : {};
+    var newParams = methodName ? {method: methodName, param: param} : {};
 
-    if(_.isEqual(this.binParams, newParams)) {
+    if (_.isEqual(this.binParams, newParams)) {
       return false;
     }
 
     var binFn = binsGenerator[methodName + 'BinMapper'];
 
-    if(!binFn) {
+    if (!binFn) {
       removeGenomesFromTaxonomy(taxonomy);
-      if(_.isEqual(this.binParams, {})) {
+      if (_.isEqual(this.binParams, {})) {
         return false;
       }
 
@@ -74,13 +85,13 @@ function addGeneratorToTaxonomy(binsGenerator, taxonomy) {
 
     return true;
   };
-  taxonomy.removeBins = function() { return taxonomy.setBinType() };
+  taxonomy.removeBins = function () { return taxonomy.setBinType() };
 
   return taxonomy;
 }
 
 module.exports = {
-  get: function(local) {
+  get: function (local) {
     return Q.all([
       binsPromise.get(local),
       treesPromise.get(local)
