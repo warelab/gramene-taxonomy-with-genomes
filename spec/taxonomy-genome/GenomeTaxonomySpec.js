@@ -36,6 +36,65 @@ describe('Taxonomy with Binned Genomes', function () {
     });
   });
 
+  pit('setBinType should return a boolean as to whether the bin config changed', function() {
+    return gtaxonomy.get(true).then(function (taxonomy) {
+      expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(200);
+
+      expect(taxonomy.setBinType('fixed', 200)).toEqual(false);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(200);
+
+      expect(taxonomy.setBinType('fixed', 1000)).toEqual(true);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(1000);
+
+      expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(200);
+    });
+  });
+
+  pit('setBinType to unrecognized should clear bins', function() {
+    return gtaxonomy.get(true).then(function (taxonomy) {
+      expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(200);
+
+      expect(taxonomy.setBinType()).toEqual(true);
+      expect(taxonomy.binParams.method).toBeUndefined();
+      expect(taxonomy.binParams.param).toBeUndefined();
+
+      expect(taxonomy.setBinType()).toEqual(false);
+      expect(taxonomy.binParams.method).toBeUndefined();
+      expect(taxonomy.binParams.param).toBeUndefined();
+
+      expect(taxonomy.setBinType('i do not exist')).toEqual(false);
+      expect(taxonomy.binParams.method).toBeUndefined();
+      expect(taxonomy.binParams.param).toBeUndefined();
+
+      expect(function() { taxonomy.setBinType('fixed', 'i do not exist') })
+        .toThrow('binsPerGenome must be numeric: i do not exist');
+    });
+  });
+
+  pit('removeBins should also clear bins', function() {
+    return gtaxonomy.get(true).then(function (taxonomy) {
+      expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
+      expect(taxonomy.binParams.method).toEqual('fixed');
+      expect(taxonomy.binParams.param).toEqual(200);
+
+      expect(taxonomy.removeBins()).toEqual(true);
+      expect(taxonomy.binParams.method).toBeUndefined();
+      expect(taxonomy.binParams.param).toBeUndefined();
+
+      expect(taxonomy.removeBins()).toEqual(false);
+      expect(taxonomy.binParams.method).toBeUndefined();
+      expect(taxonomy.binParams.param).toBeUndefined();
+    });
+  });
+
   pit('should allow search results to be added', function () {
     var testSearch = require('gramene-search-client').client._testSearch;
 
