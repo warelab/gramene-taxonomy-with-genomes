@@ -18,8 +18,8 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
   });
 
   taxonomy.results = function () { return genomes.results; };
-  taxonomy.binCount = function () { return genomes.binCount(); };
-  taxonomy.setResults = function() { return genomes.setResults.apply(genomes, arguments); };
+  taxonomy.binCount = genomes.binCount.bind(genomes);
+  taxonomy.setResults = genomes.setResults.bind(genomes);
 
   taxonomy.species = function () {
     return taxonomy.all(function (node) {
