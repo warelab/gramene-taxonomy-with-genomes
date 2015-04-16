@@ -1,0 +1,31 @@
+{
+  "name": "gramene-taxonomy-with-genomes",
+  "version": "1.0.0",
+  "description": "Integrate gramene-trees-client taxonomy with gramene-bins-client",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mycrobe/gramene-taxonomy-with-genomes.git"
+  },
+  "author": "mycrobe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mycrobe/gramene-taxonomy-with-genomes/issues"
+  },
+  "homepage": "https://github.com/mycrobe/gramene-taxonomy-with-genomes",
+  "devDependencies": {
+    "search": "git://github.com/mycrobe/gramene-search-client.git#master",
+    "jasmine-expect": "^2.0.0-beta1",
+    "jasmine-node": "^1.14.5",
+    "jasmine-pit": "^2.0.2"
+  },
+  "dependencies": {
+    "bins": "git://github.com/mycrobe/gramene-bins-client.git#master",
+    "lodash": "^3.3.1",
+    "q": "^1.2.0",
+    "trees": "git://github.com/mycrobe/gramene-trees-client.git#master"
+  }
+}
