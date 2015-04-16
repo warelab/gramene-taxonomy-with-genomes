@@ -3,6 +3,7 @@
 var binsPromise = require('gramene-bins-client').binsPromise;
 var treesPromise = require('gramene-trees-client').promise;
 var Q = require('q');
+var _ = require('lodash');
 
 function addGenomesToTaxonomy(taxonomy, genomes) {
   taxonomy.leafNodes().forEach(function (speciesNode) {
@@ -30,13 +31,50 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
   }
 }
 
+function removeGenomesFromTaxonomy(taxonomy) {
+  taxonomy.leafNodes().forEach(function (speciesNode) {
+    delete speciesNode.model.genome;
+  });
+
+  ['results', 'binCount', 'setResults', 'species'].map(function(fnName) {
+    delete taxonomy[fnName];
+  })
+}
+
 function addGeneratorToTaxonomy(binsGenerator, taxonomy) {
+  taxonomy.binParams = {};
   taxonomy.setBinType = function(methodName, param) {
+
+    var newParams = methodName ? { method: methodName, param: param } : {};
+
+    if(_.isEqual(this.binParams, newParams)) {
+      return false;
+    }
+
     var binFn = binsGenerator[methodName + 'BinMapper'];
+
+    if(!binFn) {
+      removeGenomesFromTaxonomy(taxonomy);
+      if(_.isEqual(this.binParams, {})) {
+        return false;
+      }
+
+      this.binParams = {};
+      return true;
+    }
+
     var genomes = binFn(param).binnedGenomes();
 
+    this.binParams = {
+      method: methodName,
+      param: param
+    };
+
     addGenomesToTaxonomy(taxonomy, genomes);
+
+    return true;
   };
+  taxonomy.removeBins = function() { return taxonomy.setBinType() };
 
   return taxonomy;
 }
