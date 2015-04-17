@@ -121,4 +121,14 @@ describe('Taxonomy with Binned Genomes', function () {
       }
     );
   });
+
+  pit('species should have name and genome', function() {
+    return gtaxPromise.then(function(taxonomy) {
+      taxonomy.setBinType('fixed', 200);
+      taxonomy.species().map(function(sp) {
+        expect(sp.name).toBeNonEmptyString();
+        expect(sp.genome).toBeNonEmptyObject();
+      });
+    });
+  });
 });
