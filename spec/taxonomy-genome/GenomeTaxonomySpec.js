@@ -10,10 +10,15 @@ require('jasmine-expect');
 var binFunctions = ['results', 'binCount', 'setResults', 'species'];
 
 describe('Taxonomy with Binned Genomes', function () {
-  var gtaxonomy = require('../../index');
+  var gtaxonomy, gtaxPromise;
+
+  beforeEach(function() {
+    gtaxonomy = require('../../index');
+    gtaxPromise = gtaxonomy.get(true);
+  });
 
   pit('should get the taxonomy with new function to specify bin type', function () {
-    return gtaxonomy.get(true).then(function (taxonomy) {
+    return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType).toBeFunction();
 
       binFunctions.map(function (fnName) {
@@ -23,7 +28,7 @@ describe('Taxonomy with Binned Genomes', function () {
   });
 
   pit('should allow a bin type to be specified', function () {
-    return gtaxonomy.get(true).then(function (taxonomy) {
+    return gtaxPromise.then(function (taxonomy) {
       taxonomy.setBinType('fixed', 200);
 
       binFunctions.map(function (fnName) {
@@ -40,7 +45,7 @@ describe('Taxonomy with Binned Genomes', function () {
   });
 
   pit('setBinType should return a boolean as to whether the bin config changed', function() {
-    return gtaxonomy.get(true).then(function (taxonomy) {
+    return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
       expect(taxonomy.binParams.param).toEqual(200);
@@ -60,7 +65,7 @@ describe('Taxonomy with Binned Genomes', function () {
   });
 
   pit('setBinType to unrecognized should clear bins', function() {
-    return gtaxonomy.get(true).then(function (taxonomy) {
+    return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
       expect(taxonomy.binParams.param).toEqual(200);
@@ -83,7 +88,7 @@ describe('Taxonomy with Binned Genomes', function () {
   });
 
   pit('removeBins should also clear bins', function() {
-    return gtaxonomy.get(true).then(function (taxonomy) {
+    return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
       expect(taxonomy.binParams.param).toEqual(200);
@@ -102,11 +107,11 @@ describe('Taxonomy with Binned Genomes', function () {
     var testSearch = require('gramene-search-client').client._testSearch;
 
     return Q.all([
-      gtaxonomy.get(true),
+      gtaxPromise,
       testSearch('binned')
-    ]).spread(function (taxonomy, results) {
+    ]).spread(function (taxonomy, exampleSearchResults) {
         taxonomy.setBinType('fixed', 200);
-        taxonomy.setResults(results.fixed_200_bin);
+        taxonomy.setResults(exampleSearchResults.fixed_200_bin);
 
         expect(taxonomy.results()).toBeDefined();
         expect(taxonomy.results().count).toEqual(2147);
