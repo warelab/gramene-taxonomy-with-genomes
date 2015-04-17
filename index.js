@@ -8,8 +8,7 @@ var _ = require('lodash');
 function addGenomesToTaxonomy(taxonomy, genomes) {
   taxonomy.leafNodes().forEach(function (speciesNode) {
     var species = speciesNode.model,
-      taxonId = species.id,
-      genome = genomes.get(taxonId);
+      genome = genomes.get(species.id);
 
     if (!genome) {
       console.warn('No genome found for', species);
