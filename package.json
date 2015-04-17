@@ -8,25 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mycrobe/gramene-taxonomy-with-genomes.git"
+    "url": "https://github.com/warelab/gramene-taxonomy-with-genomes.git"
   },
   "author": "mycrobe",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mycrobe/gramene-taxonomy-with-genomes/issues"
+    "url": "https://github.com/warelab/gramene-taxonomy-with-genomes/issues"
   },
-  "homepage": "https://github.com/mycrobe/gramene-taxonomy-with-genomes",
+  "homepage": "https://github.com/warelab/gramene-taxonomy-with-genomes",
   "devDependencies": {
-    "search": "git://github.com/mycrobe/gramene-search-client.git#master",
+    "search": "git://github.com/warelab/gramene-search-client.git#master",
     "jasmine-expect": "^2.0.0-beta1",
     "jasmine-node": "^1.14.5",
     "jasmine-pit": "^2.0.2"
   },
   "dependencies": {
-    "bins": "git://github.com/mycrobe/gramene-bins-client.git#master",
+    "bins": "git://github.com/warelab/gramene-bins-client.git#master",
     "is-number": "^1.1.2",
     "lodash": "^3.7.0",
     "q": "^1.2.0",
-    "trees": "git://github.com/mycrobe/gramene-trees-client.git#master"
+    "trees": "git://github.com/warelab/gramene-trees-client.git#master"
   }
 }
