@@ -122,6 +122,29 @@ describe('Taxonomy with Binned Genomes', function () {
     );
   });
 
+  pit('should be able to get results for each bin on a genome', function() {
+    var testSearch = require('gramene-search-client').client._testSearch;
+
+    return Q.all([
+      gtaxPromise,
+      testSearch('binned')
+    ]).spread(function (taxonomy, exampleSearchResults) {
+        var nodeModel;
+
+        taxonomy.setBinType('fixed', 200);
+        taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+
+        nodeModel = taxonomy.speciesWithResults()[0];
+        nodeModel.genome.eachRegion(function(region) {
+          return region.eachBin(function(bin) {
+            expect(bin.results).toBeDefined();
+            expect(bin.results.count).toBeNumber();
+          });
+        });
+      }
+    );
+  });
+
   pit('species should have name and genome', function() {
     return gtaxPromise.then(function(taxonomy) {
       taxonomy.setBinType('fixed', 200);
