@@ -101,13 +101,13 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
         .map(function (node) {
           return node.model;
         });
-    }.bind(self);
+    }.call(self);
   }
 
   taxonomyPrototype.species = function() {
     return getNodesAndReturnModel(this, function (node) {
       return node.model.genome;
-    })();
+    });
   };
 
   taxonomyPrototype.speciesWithResults = function() {
@@ -115,7 +115,7 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
       return node.model.genome &&
         node.model.genome.results &&
         node.model.genome.results.count;
-    })();
+    });
   }
 }
 
