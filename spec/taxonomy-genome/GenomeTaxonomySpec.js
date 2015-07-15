@@ -7,7 +7,7 @@ var Q = require('q');
 jasminePit.install(global);
 require('jasmine-expect');
 
-var binFunctions = ['results', 'binCount', 'setResults', 'species'];
+var binFunctions = ['stats', 'results', 'setResults', 'species'];
 
 describe('Taxonomy with Binned Genomes', function () {
   var gtaxonomy, gtaxPromise;
@@ -29,6 +29,8 @@ describe('Taxonomy with Binned Genomes', function () {
 
   pit('should allow a bin type to be specified', function () {
     return gtaxPromise.then(function (taxonomy) {
+      var arabidopsis = taxonomy.indices.name['Arabidopsis'];
+
       taxonomy.setBinType('fixed', 200);
 
       binFunctions.map(function (fnName) {
@@ -36,8 +38,13 @@ describe('Taxonomy with Binned Genomes', function () {
       });
 
       expect(taxonomy.results()).toBeUndefined();
-      expect(taxonomy.binCount()).toEqual(6009);
-      expect(taxonomy.species().length).toEqual(39);
+      expect(taxonomy.stats().bins).toEqual(6009);
+      expect(taxonomy.stats().genomes).toEqual(39);
+
+      expect(arabidopsis.results()).toBeUndefined();
+      expect(arabidopsis.stats().bins).toEqual(400);
+      expect(arabidopsis.stats().genomes).toEqual(2);
+      expect(taxonomy.species().length).toEqual(taxonomy.stats().genomes);
 
       // no results yet, so...
       expect(taxonomy.speciesWithResults().length).toEqual(0);
@@ -110,14 +117,26 @@ describe('Taxonomy with Binned Genomes', function () {
       gtaxPromise,
       testSearch('binned')
     ]).spread(function (taxonomy, exampleSearchResults) {
+        var arabidopsis = taxonomy.indices.name['Arabidopsis'];
+
         taxonomy.setBinType('fixed', 200);
         taxonomy.setResults(exampleSearchResults.fixed_200_bin);
 
-        expect(taxonomy.results()).toBeDefined();
+        expect(taxonomy.results).toBeDefined();
         expect(taxonomy.results().count).toEqual(2147);
+        expect(taxonomy.results().bins).toEqual(1103);
 
-        expect(taxonomy.species().length).toEqual(39);
+        expect(taxonomy.stats().genomes).toEqual(39);
+        expect(taxonomy.species().length).toEqual(taxonomy.stats().genomes);
         expect(taxonomy.speciesWithResults().length).toEqual(37);
+
+        expect(arabidopsis.results).toBeDefined();
+        expect(arabidopsis.results().count).toEqual(99);
+        expect(arabidopsis.results().bins).toEqual(73);
+
+        expect(arabidopsis.stats().genomes).toEqual(2);
+        expect(arabidopsis.species().length).toEqual(arabidopsis.stats().genomes);
+        expect(arabidopsis.speciesWithResults().length).toEqual(2);
       }
     );
   });
@@ -152,6 +171,38 @@ describe('Taxonomy with Binned Genomes', function () {
         expect(sp.name).toBeNonEmptyString();
         expect(sp.genome).toBeNonEmptyObject();
       });
+    });
+  });
+
+  pit('should roll up stats from species to higher taxonomy nodes', function () {
+    var testSearch = require('gramene-search-client').client._testSearch;
+
+    return Q.all([
+      gtaxPromise,
+      testSearch('binned')
+    ]).spread(function (taxonomy, exampleSearchResults) {
+      var arabidopsis;
+
+      // given
+      taxonomy.setBinType('fixed', 200);
+      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+      arabidopsis = taxonomy.indices.name['Arabidopsis'];
+
+      // then
+      expect(taxonomy.stats().genes).toEqual(1666975);
+      expect(taxonomy.stats().genomes).toEqual(39);
+      expect(taxonomy.stats().bins).toEqual(6009);
+
+      expect(taxonomy.results().count).toEqual(2147);
+      expect(taxonomy.results().bins).toEqual(1103);
+
+      expect(arabidopsis.stats().genes).toEqual(66269);
+      expect(arabidopsis.stats().genomes).toEqual(2);
+      expect(arabidopsis.stats().bins).toEqual(400);
+
+      expect(arabidopsis.results().count).toEqual(99);
+      expect(arabidopsis.results().bins).toEqual(73);
+
     });
   });
 });
