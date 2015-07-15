@@ -10,12 +10,12 @@ var _ = require('lodash');
 // the other one.
 function addCounts(o1, o2) {
   var result;
-  if(o1 && o2) {
-    result = _.merge(o1, o2, function(a, b) {
+  if (o1 && o2) {
+    result = _.merge(o1, o2, function (a, b) {
       return a + b;
     });
   }
-  else if(o1) {
+  else if (o1) {
     result = o1;
   }
   else {
@@ -41,7 +41,7 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
     var statsFromChildren,
       statsFromGenome;
 
-    if(node.model.genome) {
+    if (node.model.genome) {
       statsFromGenome = {
         genomes: 1,
         genes: node.model.geneCount,
@@ -49,8 +49,8 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
       };
     }
 
-    if(node.children && node.children.length) {
-      statsFromChildren = _.reduce(node.children, function(total, childNode) {
+    if (node.children && node.children.length) {
+      statsFromChildren = _.reduce(node.children, function (total, childNode) {
         return addCounts(total, calcStatsForTaxonomyNode(childNode));
       }, {genomes: 0, genes: 0, bins: 0});
     }
@@ -62,27 +62,30 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
 
   calcStatsForTaxonomyNode(taxonomy);
 
-  taxonomyPrototype.genomes = function() {
-    return this.leafNodes().map(function(species) {
+  taxonomyPrototype.genomes = function () {
+    return this.leafNodes().map(function (species) {
       return species.model.genome;
     });
   };
 
   taxonomyPrototype.results = function () { return this.model.results; };
   taxonomyPrototype.stats = function () { return this.model.stats; };
-  taxonomy.setResults = function() {
+  taxonomyPrototype.globalResultSetStats = function () { return genomes.stats };
+
+  taxonomy.setResults = function () {
+    var globalStats;
     genomes.setResults.apply(genomes, arguments);
 
     function updateCounts(node) {
       var countFromChildren,
-          countFromGenome;
+        countFromGenome;
 
-      if(node.model.genome) {
+      if (node.model.genome) {
         countFromGenome = node.model.genome.results;
       }
 
-      if(node.children && node.children.length) {
-        countFromChildren = _.reduce(node.children, function(total, childNode) {
+      if (node.children && node.children.length) {
+        countFromChildren = _.reduce(node.children, function (total, childNode) {
           return addCounts(total, updateCounts(childNode));
         }, {count: 0, bins: 0});
       }
@@ -104,13 +107,13 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
     }.call(self);
   }
 
-  taxonomyPrototype.species = function() {
+  taxonomyPrototype.species = function () {
     return getNodesAndReturnModel(this, function (node) {
       return node.model.genome;
     });
   };
 
-  taxonomyPrototype.speciesWithResults = function() {
+  taxonomyPrototype.speciesWithResults = function () {
     return getNodesAndReturnModel(this, function (node) {
       return node.model.genome &&
         node.model.genome.results &&
