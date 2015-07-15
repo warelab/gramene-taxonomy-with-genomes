@@ -7,12 +7,12 @@ var Q = require('q');
 jasminePit.install(global);
 require('jasmine-expect');
 
-var binFunctions = ['stats', 'results', 'setResults', 'species'];
+var binFunctions = ['stats', 'results', 'setResults', 'species', 'globalResultSetStats'];
 
 describe('Taxonomy with Binned Genomes', function () {
   var gtaxonomy, gtaxPromise;
 
-  beforeEach(function() {
+  beforeEach(function () {
     gtaxonomy = require('../../index');
     gtaxPromise = gtaxonomy.get(true);
   });
@@ -51,7 +51,7 @@ describe('Taxonomy with Binned Genomes', function () {
     });
   });
 
-  pit('setBinType should return a boolean as to whether the bin config changed', function() {
+  pit('setBinType should return a boolean as to whether the bin config changed', function () {
     return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
@@ -71,7 +71,7 @@ describe('Taxonomy with Binned Genomes', function () {
     });
   });
 
-  pit('setBinType to unrecognized should clear bins', function() {
+  pit('setBinType to unrecognized should clear bins', function () {
     return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
@@ -89,12 +89,12 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(taxonomy.binParams.method).toBeUndefined();
       expect(taxonomy.binParams.param).toBeUndefined();
 
-      expect(function() { taxonomy.setBinType('fixed', 'i do not exist') })
+      expect(function () { taxonomy.setBinType('fixed', 'i do not exist') })
         .toThrow('binsPerGenome must be numeric: i do not exist');
     });
   });
 
-  pit('removeBins should also clear bins', function() {
+  pit('removeBins should also clear bins', function () {
     return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
       expect(taxonomy.binParams.method).toEqual('fixed');
@@ -141,7 +141,7 @@ describe('Taxonomy with Binned Genomes', function () {
     );
   });
 
-  pit('should be able to get results for each bin on a genome', function() {
+  pit('should be able to get results for each bin on a genome', function () {
     var testSearch = require('gramene-search-client').client._testSearch;
 
     return Q.all([
@@ -154,8 +154,8 @@ describe('Taxonomy with Binned Genomes', function () {
         taxonomy.setResults(exampleSearchResults.fixed_200_bin);
 
         nodeModel = taxonomy.speciesWithResults()[0];
-        nodeModel.genome.eachRegion(function(region) {
-          return region.eachBin(function(bin) {
+        nodeModel.genome.eachRegion(function (region) {
+          return region.eachBin(function (bin) {
             expect(bin.results).toBeDefined();
             expect(bin.results.count).toBeNumber();
           });
@@ -164,10 +164,10 @@ describe('Taxonomy with Binned Genomes', function () {
     );
   });
 
-  pit('species should have name and genome', function() {
-    return gtaxPromise.then(function(taxonomy) {
+  pit('species should have name and genome', function () {
+    return gtaxPromise.then(function (taxonomy) {
       taxonomy.setBinType('fixed', 200);
-      taxonomy.species().map(function(sp) {
+      taxonomy.species().map(function (sp) {
         expect(sp.name).toBeNonEmptyString();
         expect(sp.genome).toBeNonEmptyObject();
       });
@@ -203,6 +203,40 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(arabidopsis.results().count).toEqual(99);
       expect(arabidopsis.results().bins).toEqual(73);
 
+    });
+  });
+
+  pit('should have global statistics about the result set', function () {
+    var testSearch = require('gramene-search-client').client._testSearch;
+
+    return Q.all([
+      gtaxPromise,
+      testSearch('binned')
+    ]).spread(function (taxonomy, exampleSearchResults) {
+      // given
+      taxonomy.setBinType('fixed', 200);
+      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+
+      // then
+      var globalStats = taxonomy.globalResultSetStats();
+
+      expect(globalStats.genomes).toBeDefined();
+      expect(globalStats.bins).toBeDefined();
+
+      expect(globalStats.genomes.count).toEqual(taxonomy.stats().genomes);
+      expect(globalStats.genomes.min).toEqual(0);
+      expect(globalStats.genomes.max).toEqual(172);
+      expect(+globalStats.genomes.avg.toPrecision(3)).toEqual(55.1);
+      expect(+globalStats.genomes.stdev.toPrecision(3)).toEqual(31.4);
+
+      // these are not equal because former filters out UNACNHORED in order to make meaningful stats.
+      expect(globalStats.bins.count).not.toEqual(taxonomy.stats().bins);
+      expect(globalStats.bins.count).toEqual(5979);
+
+      expect(globalStats.bins.min).toEqual(0);
+      expect(globalStats.bins.max).toEqual(20);
+      expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.281);
+      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.8);
     });
   });
 });
