@@ -73,12 +73,13 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
   taxonomyPrototype.globalResultSetStats = function () { return genomes.stats };
 
   taxonomy.setResults = function () {
-    var globalStats;
+    var maxProportion = 0, maxProportionNode;
     genomes.setResults.apply(genomes, arguments);
 
     function updateCounts(node) {
       var countFromChildren,
-        countFromGenome;
+        countFromGenome,
+        resultCount, geneCount, proportion;
 
       if (node.model.genome) {
         countFromGenome = node.model.genome.results;
@@ -92,10 +93,21 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
 
       node.model.results = addCounts(countFromGenome, countFromChildren);
 
+      resultCount = node.model.results.count;
+      geneCount = node.model.stats.genes;
+      proportion = geneCount ? ((resultCount + 1) / (geneCount + 1)) : 0;
+      node.model.results.proportion = proportion;
+      if(proportion > maxProportion) {
+        maxProportion = proportion;
+        maxProportionNode = node;
+      }
+
       return node.model.results;
     }
 
     updateCounts(taxonomy);
+    genomes.stats.maxProportion = maxProportion;
+    genomes.stats.maxProportionNode = maxProportionNode;
   };
 
   function getNodesAndReturnModel(self, predicate) {
