@@ -236,7 +236,29 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(globalStats.bins.min).toEqual(0);
       expect(globalStats.bins.max).toEqual(20);
       expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.281);
-      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.8);
+      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.800);
+    });
+  });
+
+  pit('should know the proportion of genes in the result set for each node', function () {
+    var testSearch = require('gramene-search-client').client._testSearch;
+
+    return Q.all([
+      gtaxPromise,
+      testSearch('binned')
+    ]).spread(function (taxonomy, exampleSearchResults) {
+      var arabidopsis;
+
+      // given
+      taxonomy.setBinType('fixed', 200);
+      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+      arabidopsis = taxonomy.indices.name['Arabidopsis'];
+
+      // then
+      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00129);
+      expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00149);
+      expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
+      expect(taxonomy.globalResultSetStats().maxProportionNode.model.id).toEqual(436017);
     });
   });
 });
