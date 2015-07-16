@@ -256,8 +256,8 @@ describe('Taxonomy with Binned Genomes', function () {
 
       // then
       expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00129);
-      expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00151);
-      expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00262);
+      expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00149);
+      expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
       expect(taxonomy.globalResultSetStats().maxProportionNode.model.id).toEqual(436017);
     });
   });
