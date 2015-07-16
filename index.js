@@ -95,7 +95,7 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
 
       resultCount = node.model.results.count;
       geneCount = node.model.stats.genes;
-      proportion = geneCount ? ((resultCount + 1) / (geneCount + 1)) : 0;
+      proportion = geneCount ? (resultCount / geneCount) : 0;
       node.model.results.proportion = proportion;
       if(proportion > maxProportion) {
         maxProportion = proportion;
