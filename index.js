@@ -77,8 +77,8 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
     genomes.setResults.apply(genomes, arguments);
 
     function updateCounts(node) {
-      var countFromChildren,
-        countFromGenome,
+      var countFromChildren={count: 0, bins: 0},
+        countFromGenome={count: 0, bins: 0},
         resultCount, geneCount, proportion;
 
       if (node.model.genome) {
