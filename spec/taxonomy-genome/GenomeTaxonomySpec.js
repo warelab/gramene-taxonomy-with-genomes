@@ -120,11 +120,11 @@ describe('Taxonomy with Binned Genomes', function () {
         var arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
         taxonomy.setBinType('fixed', 200);
-        taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+        taxonomy.setResults(exampleSearchResults.fixed_200__bin);
 
         expect(taxonomy.results).toBeDefined();
-        expect(taxonomy.results().count).toEqual(2147);
-        expect(taxonomy.results().bins).toEqual(1103);
+        expect(taxonomy.results().count).toEqual(2166);
+        expect(taxonomy.results().bins).toEqual(1112);
 
         expect(taxonomy.stats().genomes).toEqual(39);
         expect(taxonomy.species().length).toEqual(taxonomy.stats().genomes);
@@ -151,7 +151,7 @@ describe('Taxonomy with Binned Genomes', function () {
         var nodeModel;
 
         taxonomy.setBinType('fixed', 200);
-        taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+        taxonomy.setResults(exampleSearchResults.fixed_200__bin);
 
         nodeModel = taxonomy.speciesWithResults()[0];
         nodeModel.genome.eachRegion(function (region) {
@@ -185,7 +185,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
       // given
       taxonomy.setBinType('fixed', 200);
-      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+      taxonomy.setResults(exampleSearchResults.fixed_200__bin);
       arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
       // then
@@ -193,8 +193,8 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(taxonomy.stats().genomes).toEqual(39);
       expect(taxonomy.stats().bins).toEqual(6009);
 
-      expect(taxonomy.results().count).toEqual(2147);
-      expect(taxonomy.results().bins).toEqual(1103);
+      expect(taxonomy.results().count).toEqual(2166);
+      expect(taxonomy.results().bins).toEqual(1112);
 
       expect(arabidopsis.stats().genes).toEqual(66269);
       expect(arabidopsis.stats().genomes).toEqual(2);
@@ -215,7 +215,7 @@ describe('Taxonomy with Binned Genomes', function () {
     ]).spread(function (taxonomy, exampleSearchResults) {
       // given
       taxonomy.setBinType('fixed', 200);
-      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+      taxonomy.setResults(exampleSearchResults.fixed_200__bin);
 
       // then
       var globalStats = taxonomy.globalResultSetStats();
@@ -225,18 +225,18 @@ describe('Taxonomy with Binned Genomes', function () {
 
       expect(globalStats.genomes.count).toEqual(taxonomy.stats().genomes);
       expect(globalStats.genomes.min).toEqual(0);
-      expect(globalStats.genomes.max).toEqual(172);
-      expect(+globalStats.genomes.avg.toPrecision(3)).toEqual(55.1);
-      expect(+globalStats.genomes.stdev.toPrecision(3)).toEqual(31.4);
+      expect(globalStats.genomes.max).toEqual(174);
+      expect(+globalStats.genomes.avg.toPrecision(3)).toEqual(55.5);
+      expect(+globalStats.genomes.stdev.toPrecision(3)).toEqual(31.7);
 
       // these are not equal because former filters out UNACNHORED in order to make meaningful stats.
       expect(globalStats.bins.count).not.toEqual(taxonomy.stats().bins);
       expect(globalStats.bins.count).toEqual(5979);
 
       expect(globalStats.bins.min).toEqual(0);
-      expect(globalStats.bins.max).toEqual(20);
-      expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.281);
-      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.800);
+      expect(globalStats.bins.max).toEqual(21);
+      expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.285);
+      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.807);
     });
   });
 
@@ -251,11 +251,11 @@ describe('Taxonomy with Binned Genomes', function () {
 
       // given
       taxonomy.setBinType('fixed', 200);
-      taxonomy.setResults(exampleSearchResults.fixed_200_bin);
+      taxonomy.setResults(exampleSearchResults.fixed_200__bin);
       arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
       // then
-      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00129);
+      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.0013);
       expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00149);
       expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
       expect(+arabidopsis.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
