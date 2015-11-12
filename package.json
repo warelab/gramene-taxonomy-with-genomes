@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Integrate gramene-trees-client taxonomy with gramene-bins-client",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "jasmine-pit": "^2.0.2"
   },
   "dependencies": {
-    "gramene-bins-client": "^1.0.0",
+    "gramene-bins-client": "^2.0.0",
     "gramene-trees-client": "^1.0.0",
     "is-number": "^1.1.2",
     "lodash": "^3.7.0",
