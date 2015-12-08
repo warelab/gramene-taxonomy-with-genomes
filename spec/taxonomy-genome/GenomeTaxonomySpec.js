@@ -1,7 +1,6 @@
 'use strict';
 
 var jasminePit = require('jasmine-pit');
-var _ = require('lodash');
 var Q = require('q');
 
 jasminePit.install(global);
@@ -189,7 +188,7 @@ describe('Taxonomy with Binned Genomes', function () {
       arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
       // then
-      expect(taxonomy.stats().genes).toEqual(1666975);
+      expect(taxonomy.stats().genes).toEqual(1568831); // this is the number of genes that are db_type:"core" (i.e. not "otherfeatures")
       expect(taxonomy.stats().genomes).toEqual(39);
       expect(taxonomy.stats().bins).toEqual(6009);
 
@@ -255,7 +254,7 @@ describe('Taxonomy with Binned Genomes', function () {
       arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
       // then
-      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.0013);
+      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00138);
       expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00149);
       expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
       expect(+arabidopsis.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
