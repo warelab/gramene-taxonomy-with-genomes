@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Integrate gramene-trees-client taxonomy with gramene-bins-client",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/warelab/gramene-taxonomy-with-genomes",
   "devDependencies": {
-    "gramene-search-client": "^2.2.0",
+    "gramene-search-client": "2.5.5",
     "jasmine-expect": "^2.0.0-beta1",
     "jasmine-node": "^1.14.5",
     "jasmine-pit": "^2.0.2"

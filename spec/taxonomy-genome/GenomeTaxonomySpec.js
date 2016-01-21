@@ -114,7 +114,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
     return Q.all([
       gtaxPromise,
-      testSearch('binned')
+      testSearch('rows10')
     ]).spread(function (taxonomy, exampleSearchResults) {
         var arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
@@ -122,16 +122,16 @@ describe('Taxonomy with Binned Genomes', function () {
         taxonomy.setResults(exampleSearchResults.fixed_200__bin);
 
         expect(taxonomy.results).toBeDefined();
-        expect(taxonomy.results().count).toEqual(2166);
-        expect(taxonomy.results().bins).toEqual(1112);
+        expect(taxonomy.results().count).toEqual(5);
+        expect(taxonomy.results().bins).toEqual(5);
 
         expect(taxonomy.stats().genomes).toEqual(39);
         expect(taxonomy.species().length).toEqual(taxonomy.stats().genomes);
-        expect(taxonomy.speciesWithResults().length).toEqual(37);
+        expect(taxonomy.speciesWithResults().length).toEqual(5);
 
         expect(arabidopsis.results).toBeDefined();
-        expect(arabidopsis.results().count).toEqual(99);
-        expect(arabidopsis.results().bins).toEqual(73);
+        expect(arabidopsis.results().count).toEqual(2);
+        expect(arabidopsis.results().bins).toEqual(2);
 
         expect(arabidopsis.stats().genomes).toEqual(2);
         expect(arabidopsis.species().length).toEqual(arabidopsis.stats().genomes);
@@ -145,7 +145,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
     return Q.all([
       gtaxPromise,
-      testSearch('binned')
+      testSearch('rows10')
     ]).spread(function (taxonomy, exampleSearchResults) {
         var nodeModel;
 
@@ -178,7 +178,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
     return Q.all([
       gtaxPromise,
-      testSearch('binned')
+      testSearch('rows10')
     ]).spread(function (taxonomy, exampleSearchResults) {
       var arabidopsis;
 
@@ -192,15 +192,15 @@ describe('Taxonomy with Binned Genomes', function () {
       expect(taxonomy.stats().genomes).toEqual(39);
       expect(taxonomy.stats().bins).toEqual(6009);
 
-      expect(taxonomy.results().count).toEqual(2166);
-      expect(taxonomy.results().bins).toEqual(1112);
+      expect(taxonomy.results().count).toEqual(5);
+      expect(taxonomy.results().bins).toEqual(5);
 
       expect(arabidopsis.stats().genes).toEqual(66269);
       expect(arabidopsis.stats().genomes).toEqual(2);
       expect(arabidopsis.stats().bins).toEqual(400);
 
-      expect(arabidopsis.results().count).toEqual(99);
-      expect(arabidopsis.results().bins).toEqual(73);
+      expect(arabidopsis.results().count).toEqual(2);
+      expect(arabidopsis.results().bins).toEqual(2);
 
     });
   });
@@ -210,7 +210,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
     return Q.all([
       gtaxPromise,
-      testSearch('binned')
+      testSearch('rows10')
     ]).spread(function (taxonomy, exampleSearchResults) {
       // given
       taxonomy.setBinType('fixed', 200);
@@ -224,18 +224,18 @@ describe('Taxonomy with Binned Genomes', function () {
 
       expect(globalStats.genomes.count).toEqual(taxonomy.stats().genomes);
       expect(globalStats.genomes.min).toEqual(0);
-      expect(globalStats.genomes.max).toEqual(174);
-      expect(+globalStats.genomes.avg.toPrecision(3)).toEqual(55.5);
-      expect(+globalStats.genomes.stdev.toPrecision(3)).toEqual(31.7);
+      expect(globalStats.genomes.max).toEqual(1);
+      expect(+globalStats.genomes.avg.toPrecision(3)).toEqual(.128);
+      expect(+globalStats.genomes.stdev.toPrecision(3)).toEqual(.334);
 
       // these are not equal because former filters out UNACNHORED in order to make meaningful stats.
       expect(globalStats.bins.count).not.toEqual(taxonomy.stats().bins);
       expect(globalStats.bins.count).toEqual(5979);
 
       expect(globalStats.bins.min).toEqual(0);
-      expect(globalStats.bins.max).toEqual(21);
-      expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.285);
-      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.807);
+      expect(globalStats.bins.max).toEqual(1);
+      expect(+globalStats.bins.avg.toPrecision(3)).toEqual(0.000669);
+      expect(+globalStats.bins.stdev.toPrecision(3)).toEqual(0.0259);
     });
   });
 
@@ -244,7 +244,7 @@ describe('Taxonomy with Binned Genomes', function () {
 
     return Q.all([
       gtaxPromise,
-      testSearch('binned')
+      testSearch('rows10')
     ]).spread(function (taxonomy, exampleSearchResults) {
       var arabidopsis;
 
@@ -254,11 +254,11 @@ describe('Taxonomy with Binned Genomes', function () {
       arabidopsis = taxonomy.indices.name['Arabidopsis'];
 
       // then
-      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00138);
-      expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.00149);
-      expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
-      expect(+arabidopsis.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.00249);
-      expect(taxonomy.globalResultSetStats().maxProportionNode.model.id).toEqual(436017);
+      expect(+taxonomy.results().proportion.toPrecision(3)).toEqual(0.00000319);
+      expect(+arabidopsis.results().proportion.toPrecision(3)).toEqual(0.0000302);
+      expect(+taxonomy.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.0000339);
+      expect(+arabidopsis.globalResultSetStats().maxProportion.toPrecision(3)).toEqual(0.0000339);
+      expect(taxonomy.globalResultSetStats().maxProportionNode.model.id).toEqual(3760);
     });
   });
 });
