@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/warelab/gramene-taxonomy-with-genomes",
   "devDependencies": {
-    "gramene-search-client": "^2.2.0",
+    "gramene-search-client": "2.5.5",
     "jasmine-expect": "^2.0.0-beta1",
     "jasmine-node": "^1.14.5",
     "jasmine-pit": "^2.0.2"
