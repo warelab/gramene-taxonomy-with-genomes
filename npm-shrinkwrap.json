@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "dependencies": {
     "gramene-bins-client": {
       "version": "2.2.2",
