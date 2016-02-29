@@ -23,8 +23,8 @@
     "jasmine-pit": "^2.0.2"
   },
   "dependencies": {
-    "gramene-bins-client": "2.2.2",
-    "gramene-trees-client": "2.4.0",
+    "gramene-bins-client": "2.2.3",
+    "gramene-trees-client": "2.4.1",
     "is-number": "^1.1.2",
     "lodash": "^3.7.0",
     "q": "^1.2.0"
