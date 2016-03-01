@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "dependencies": {
     "argparse": {
       "version": "1.0.3",
@@ -328,9 +328,9 @@
       }
     },
     "gramene-trees-client": {
-      "version": "2.4.1",
-      "from": "gramene-trees-client@2.4.1",
-      "resolved": "https://registry.npmjs.org/gramene-trees-client/-/gramene-trees-client-2.4.1.tgz",
+      "version": "2.4.2",
+      "from": "gramene-trees-client@2.4.2",
+      "resolved": "https://registry.npmjs.org/gramene-trees-client/-/gramene-trees-client-2.4.2.tgz",
       "dependencies": {
         "gramene-search-client": {
           "version": "2.6.2",
