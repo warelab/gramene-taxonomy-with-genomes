@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "dependencies": {
     "coffee-script": {
       "version": "1.10.0",
@@ -30,8 +30,8 @@
       }
     },
     "gramene-bins-client": {
-      "version": "2.2.5",
-      "from": "gramene-bins-client@2.2.5",
+      "version": "2.2.6",
+      "from": "gramene-bins-client@2.2.6",
       "dependencies": {
         "argparse": {
           "version": "1.0.3",
