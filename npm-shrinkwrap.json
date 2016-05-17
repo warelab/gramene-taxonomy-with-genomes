@@ -30,8 +30,8 @@
       }
     },
     "gramene-bins-client": {
-      "version": "2.2.6",
-      "from": "gramene-bins-client@2.2.6",
+      "version": "2.2.7",
+      "from": "gramene-bins-client@2.2.7",
       "dependencies": {
         "argparse": {
           "version": "1.0.3",

@@ -26,27 +26,22 @@ describe('Taxonomy with Binned Genomes', function () {
     });
   });
 
-  pit('should allow a bin type to be specified', function () {
+  pit('should allow a bin to be obtained by global index from any taxonomy node', function () {
     return gtaxPromise.then(function (taxonomy) {
-      var arabidopsis = taxonomy.indices.name['Arabidopsis'];
+      var arabidopsis = taxonomy.indices.name['Arabidopsis thaliana'];
 
       taxonomy.setBinType('fixed', 200);
 
-      binFunctions.map(function (fnName) {
-        expect(taxonomy[fnName]).toBeFunction(fnName + ' should be a function');
-      });
+      expect(taxonomy.binCount()).toEqual(taxonomy.stats().bins);
+      expect(taxonomy.getBin(0).idx).toEqual(0);
+      expect(function(){taxonomy.getBin(taxonomy.binCount()).idx}).toThrow();
+      expect(function(){taxonomy.getBin(-1).idx}).toThrow();
 
-      expect(taxonomy.results()).toBeUndefined();
-      expect(taxonomy.stats().bins).toEqual(6009);
-      expect(taxonomy.stats().genomes).toEqual(39);
+      expect(arabidopsis.getBin(0)).toEqual(taxonomy.getBin(0));
 
-      expect(arabidopsis.results()).toBeUndefined();
-      expect(arabidopsis.stats().bins).toEqual(400);
-      expect(arabidopsis.stats().genomes).toEqual(2);
-      expect(taxonomy.species().length).toEqual(taxonomy.stats().genomes);
-
-      // no results yet, so...
-      expect(taxonomy.speciesWithResults().length).toEqual(0);
+      // NB These are global bins across all genomes. This is a bit ugly for leafNodes:
+      expect(arabidopsis.getBin(0).taxon_id)
+          .not.toEqual(arabidopsis.model.genome.taxon_id);
     });
   });
 
