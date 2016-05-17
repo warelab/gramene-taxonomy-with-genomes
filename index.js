@@ -67,6 +67,12 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
       return species.model.genome;
     });
   };
+  
+  taxonomyPrototype.binCount = genomes.binCount.bind(genomes);
+  
+  taxonomyPrototype.getBin = function (idx) {
+    return genomes.getBin(idx);
+  };
 
   taxonomyPrototype.results = function () { return this.model.results; };
   taxonomyPrototype.stats = function () { return this.model.stats; };
