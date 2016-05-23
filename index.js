@@ -73,6 +73,14 @@ function addGenomesToTaxonomy(taxonomy, genomes) {
   taxonomyPrototype.getBin = function (idx) {
     return genomes.getBin(idx);
   };
+  
+  taxonomyPrototype.getBins = function (start, end) {
+    return genomes.getBins(start, end);
+  };
+  
+  taxonomyPrototype.allBins = function () {
+    return genomes.allBins();
+  };
 
   taxonomyPrototype.results = function () { return this.model.results; };
   taxonomyPrototype.stats = function () { return this.model.stats; };

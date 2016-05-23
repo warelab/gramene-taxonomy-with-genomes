@@ -45,6 +45,20 @@ describe('Taxonomy with Binned Genomes', function () {
     });
   });
 
+  pit('should allow a range of bins to be obtained by global index from any taxonomy node', function () {
+    return gtaxPromise.then(function (taxonomy) {
+      var arabidopsis = taxonomy.indices.name['Arabidopsis thaliana'];
+
+      taxonomy.setBinType('fixed', 200);
+
+      expect(taxonomy.binCount()).toEqual(taxonomy.stats().bins);
+      expect(taxonomy.getBins(0, 1).length).toEqual(2); // bin indices are inclusive.
+      expect(taxonomy.getBins(100, 100)[0]).toEqual(taxonomy.getBin(100));
+      expect(taxonomy.allBins().length).toEqual(taxonomy.binCount());
+      expect(arabidopsis.getBins(4, 6)).toEqual(taxonomy.getBins(4, 6));
+    });
+  });
+
   pit('setBinType should return a boolean as to whether the bin config changed', function () {
     return gtaxPromise.then(function (taxonomy) {
       expect(taxonomy.setBinType('fixed', 200)).toEqual(true);
