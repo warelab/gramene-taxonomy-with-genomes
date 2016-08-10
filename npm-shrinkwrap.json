@@ -1,6 +1,6 @@
 {
   "name": "gramene-taxonomy-with-genomes",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "dependencies": {
     "coffee-script": {
       "version": "1.10.0",
