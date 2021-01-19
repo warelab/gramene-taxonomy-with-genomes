@@ -202,5 +202,6 @@ module.exports = {
       binsPromise.get(local),
       treesPromise.get(local)
     ]).spread(addGeneratorToTaxonomy);
-  }
+  },
+  build: addGeneratorToTaxonomy
 };
